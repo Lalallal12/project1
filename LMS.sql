@@ -63,3 +63,11 @@ VALUES(1, '컴퓨터공학', '', now(), now()),
 (3, '경제학', '',  now(), now()),
 (4, '경영학', '',  now(), now()),
 (5, '법학', '',  now(), now());
+
+-- 2. user 테이블
+insert into public.user 
+(id,name,type,email,reg_date,mod_date) 
+values('1','오태경','PROFESSOR','AA@aaa.com',now(),now()),
+('2','박찬규','PROFESSOR','bb@aaa.com',now(),now()),
+('3','오로라','STUDENT','cc@aaa.com',now(),now()),
+('4','곽원미','STUDENT','dd@aaa.com',now(),now());
