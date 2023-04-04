@@ -71,3 +71,26 @@ values('1','오태경','PROFESSOR','AA@aaa.com',now(),now()),
 ('2','박찬규','PROFESSOR','bb@aaa.com',now(),now()),
 ('3','오로라','STUDENT','cc@aaa.com',now(),now()),
 ('4','곽원미','STUDENT','dd@aaa.com',now(),now());
+
+
+
+
+
+
+
+
+-- 5. code 테이블
+insert 
+  into code
+     ( code_group
+     , code
+     , name
+     , reg_date
+     , mod_date)
+values (
+       'USER_TYPE'
+     , 'PROFESSOR'
+     , '강사'
+     , now()
+     , now()
+);
