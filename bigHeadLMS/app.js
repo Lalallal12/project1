@@ -25,4 +25,19 @@ module.exports = async function (fastify, opts) {
     dir: path.join(__dirname, 'routes'),
     options: Object.assign({}, opts)
   })
+
+  fastify.addHook('onRequest', async (request, reply) => {
+    const token = request.headers.authorization?.split(' ')[1]
+
+    if(token === 'ABC') {
+      request.user_id = 1
+    } else if(token === 'DEF') {
+      request.user_id = 3
+    } else {
+      reply
+        .code(401)
+        .header('Content-type', 'application/json')
+        .send("Unauthorized")
+    }
+  })
 }
