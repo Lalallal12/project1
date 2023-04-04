@@ -72,10 +72,29 @@ values('1','오태경','PROFESSOR','AA@aaa.com',now(),now()),
 ('3','오로라','STUDENT','cc@aaa.com',now(),now()),
 ('4','곽원미','STUDENT','dd@aaa.com',now(),now());
 
+-- 3. class 테이블
+insert into public.class
+(id,name,user_id,category_id,reg_date,mod_date) 
+values('2','운영체제22','1','1',now(),now()),
+('2','데이터베이스','2','1',now(),now()),
+('3','정보보호','1','1',now(),now()),
+('4','자료구조','2','1',now(),now()),
+('5','알고리즘','1','1',now(),now()),
+('6','미시경제학','2','3',now(),now()),
+('7','거시경제학','1','3',now(),now()),
+('8','영어음운론','2','2',now(),now()),
+('9','영어구문론','1','2',now(),now()),
+('10','운영체제','2','1',now(),now()),
+('11','거시경제학','2','3',now(),now());
 
-
-
-
+-- 4. class_category 테이블
+insert into public.class_category
+(id,name,description,reg_date,mod_date,)
+values('1','컴퓨터공학','','45019',now(),now()),
+('2','영어학','영어','45019',now(),now()),
+('3','경제학','경제','45019',now(),now()),
+('4','경영학','경영학','45019',now(),now()),
+('5','법학','법학','45019',now(),now());
 
 
 
