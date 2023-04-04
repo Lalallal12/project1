@@ -42,30 +42,8 @@ CREATE TABLE "code" (
   PRIMARY KEY ("group", "code")
 );
 
-COMMENT ON COLUMN "class_category"."description" IS 'Content of the post';
+COMMENT ON COLUMN "class_category"."description" IS 'Class Category Description';
 
 ALTER TABLE "class" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "class" ADD FOREIGN KEY ("category_id") REFERENCES "class_category" ("id");
-
-CREATE TABLE "enrolment_class" (
-  "enrolment_class_id" integer,
-  "class_id" integer,
-  PRIMARY KEY ("enrolment_class_id", "class_id")
-);
-
-ALTER TABLE "enrolment_class" ADD FOREIGN KEY ("enrolment_class_id") REFERENCES "enrolment" ("class_id");
-
-ALTER TABLE "enrolment_class" ADD FOREIGN KEY ("class_id") REFERENCES "class" ("id");
-
-
-CREATE TABLE "enrolment_user" (
-  "enrolment_user_id" integer,
-  "user_id" integer,
-  PRIMARY KEY ("enrolment_user_id", "user_id")
-);
-
-ALTER TABLE "enrolment_user" ADD FOREIGN KEY ("enrolment_user_id") REFERENCES "enrolment" ("user_id");
-
-ALTER TABLE "enrolment_user" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
