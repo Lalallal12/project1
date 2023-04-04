@@ -40,12 +40,12 @@ CREATE TABLE "enrolment" (
 );
 
 CREATE TABLE "code" (
-  "group" varchar,
+  "code_group" varchar,
   "code" varchar,
   "name" varchar,
   "reg_date" timestamp,
   "mod_date" timestamp,
-  PRIMARY KEY ("group", "code")
+  PRIMARY KEY ("code_group", "code")
 );
 
 COMMENT ON COLUMN "class_category"."description" IS 'Class Category Description';
