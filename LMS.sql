@@ -87,10 +87,9 @@ insert
      , name
      , reg_date
      , mod_date)
-values (
-       'USER_TYPE'
-     , 'PROFESSOR'
-     , '강사'
-     , now()
-     , now()
-);
+values ('USER_TYPE', 'PROFESSOR', '강사' , now() , now()),
+       ('USER_TYPE', 'STUDENT', '학생' , now() , now()),       
+       ('ENROLMENT_STATUS', 'WAITING', '대기' , now() , now()),
+       ('ENROLMENT_STATUS', 'COMPLETION', '완료' , now() , now()),
+       ('ENROLMENT_STATUS', 'CANCELLATION', '취소' , now() , now())
+;
