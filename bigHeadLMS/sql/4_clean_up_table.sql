@@ -1,2 +1,0 @@
--- TODO
-TRUNCATE table nginx;
