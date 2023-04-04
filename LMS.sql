@@ -2,7 +2,7 @@
 CREATE SEQUENCE SEQ_USER_ID start 1;
 CREATE SEQUENCE SEQ_CLASS_ID start 1;
 CREATE SEQUENCE SEQ_CLASS_CATEGORY_ID start 1;
-CREATE SEQUENCE SEQ_ENROLMENT_USER_ID start 1;
+CREATE SEQUENCE SEQ_ENROLMENT_ID start 1;
 
 CREATE TABLE "user" (
   "id" integer PRIMARY KEY,
@@ -58,11 +58,11 @@ ALTER TABLE "class" ADD FOREIGN KEY ("category_id") REFERENCES "class_category" 
 -- 1. class_category 테이블
 INSERT INTO public.class_category
 (id, "name", description, reg_date, mod_date)
-VALUES('nextval('SEQ_USER_ID')', '컴퓨터공학', '', now(), now()),
-('nextval('SEQ_USER_ID')', '영어학', '',  now(), now()),
-('nextval('SEQ_USER_ID')', '경제학', '',  now(), now()),
-('nextval('SEQ_USER_ID')', '경영학', '',  now(), now()),
-('nextval('SEQ_USER_ID')', '법학', '',  now(), now());
+VALUES('nextval('SEQ_CLASS_CATEGORY_ID')', '컴퓨터공학', '', now(), now()),
+('nextval('SEQ_CLASS_CATEGORY_ID')', '영어학', '',  now(), now()),
+('nextval('SEQ_CLASS_CATEGORY_ID')', '경제학', '',  now(), now()),
+('nextval('SEQ_CLASS_CATEGORY_ID')', '경영학', '',  now(), now()),
+('nextval('SEQ_CLASS_CATEGORY_ID')', '법학', '',  now(), now());
 
 -- 2. user 테이블
 insert into public.user 
@@ -75,27 +75,26 @@ values('nextval('SEQ_USER_ID')','오태경','PROFESSOR','AA@aaa.com',now(),now()
 -- 3. class 테이블
 insert into public.class
 (id,name,user_id,category_id,reg_date,mod_date) 
-values('nextval('SEQ_USER_ID')','운영체제22','1','1',now(),now()),
-('nextval('SEQ_USER_ID')','데이터베이스','2','1',now(),now()),
-('nextval('SEQ_USER_ID')','정보보호','1','1',now(),now()),
-('nextval('SEQ_USER_ID')','자료구조','2','1',now(),now()),
-('nextval('SEQ_USER_ID')','알고리즘','1','1',now(),now()),
-('nextval('SEQ_USER_ID')','미시경제학','2','3',now(),now()),
-('nextval('SEQ_USER_ID')','거시경제학','1','3',now(),now()),
-('nextval('SEQ_USER_ID')','영어음운론','2','2',now(),now()),
-('nextval('SEQ_USER_ID')','영어구문론','1','2',now(),now()),
-('nextval('SEQ_USER_ID')','운영체제','2','1',now(),now()),
-('nextval('SEQ_USER_ID')','거시경제학','2','3',now(),now());
+values('nextval('SEQ_CLASS_ID')','운영체제22','1','1',now(),now()),
+('nextval('SEQ_CLASS_ID')','데이터베이스','2','1',now(),now()),
+('nextval('SEQ_CLASS_ID')','정보보호','1','1',now(),now()),
+('nextval('SEQ_CLASS_ID')','자료구조','2','1',now(),now()),
+('nextval('SEQ_CLASS_ID')','알고리즘','1','1',now(),now()),
+('nextval('SEQ_CLASS_ID')','미시경제학','2','3',now(),now()),
+('nextval('SEQ_CLASS_ID')','거시경제학','1','3',now(),now()),
+('nextval('SEQ_CLASS_ID')','영어음운론','2','2',now(),now()),
+('nextval('SEQ_CLASS_ID')','영어구문론','1','2',now(),now()),
+('nextval('SEQ_CLASS_ID')','운영체제','2','1',now(),now()),
+('nextval('SEQ_CLASS_ID')','거시경제학','2','3',now(),now());
 
--- 4. class_category 테이블
-insert into public.class_category
-(id,name,description,reg_date,mod_date,)
-values('nextval('SEQ_USER_ID')','컴퓨터공학','','45019',now(),now()),
-('nextval('SEQ_USER_ID')','영어학','영어','45019',now(),now()),
-('nextval('SEQ_USER_ID')','경제학','경제','45019',now(),now()),
-('nextval('SEQ_USER_ID')','경영학','경영학','45019',now(),now()),
-('nextval('SEQ_USER_ID')','법학','법학','45019',now(),now());
-
+-- 4. enrolment 테이블
+insert into public.enrolment
+(id,user_id,class_id,status,reg_date,mod_date)
+values('nextval('SEQ_ENROLMENT_ID'),3,1,'WAITING',now(),now()),
+('nextval('SEQ_ENROLMENT_ID'),4,2,'COMPLETION',now(),now()),
+('nextval('SEQ_ENROLMENT_ID'),3,3,'CANCELLATION',now(),now()),
+('nextval('SEQ_ENROLMENT_ID'),4,4,'COMPLETION',now(),now()),
+('nextval('SEQ_ENROLMENT_ID'),4,4,'WAITING',now(),now());
 
 
 -- 5. code 테이블
