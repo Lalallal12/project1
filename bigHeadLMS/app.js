@@ -30,8 +30,10 @@ module.exports = async function (fastify, opts) {
     const token = request.headers.authorization?.split(' ')[1]
 
     if(token === 'ABC') {
+      // PROFESSOR
       request.user_id = 1
     } else if(token === 'DEF') {
+      // STUDENT
       request.user_id = 3
     } else {
       reply
