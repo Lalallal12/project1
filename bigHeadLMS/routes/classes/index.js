@@ -125,10 +125,10 @@ module.exports = async function (fastify, opts) {
     
     if(request.body.name != undefined)
       queryStr = queryStr + ", name = '"+ request.body.name +"' ";
-    if(request.body.userId != undefined)
-      queryStr = queryStr + ", user_id = '"+ request.body.userId +"' ";
-    if(request.body.categoryId != undefined)
-      queryStr = queryStr + ", category_id = '"+ request.body.categoryId +"' ";
+    if(request.body.user_id != undefined)
+      queryStr = queryStr + ", user_id = '"+ request.body.user_id +"' ";
+    if(request.body.category_id != undefined)
+      queryStr = queryStr + ", category_id = '"+ request.body.category_id +"' ";
     
 
     queryStr = queryStr+"where id='"+request.params.id+"'";
