@@ -1,4 +1,5 @@
 'use strict'
+
 const validate = require('../../model/classScheme')() // return한 validate 
 
 module.exports = async function (fastify, opts) {
@@ -6,7 +7,7 @@ module.exports = async function (fastify, opts) {
     const userId = request.query.user_id
     const className = request.query.name
     const categoryId = request.query.category_id
-    console.log(`[debug] ${className}, ${categoryId}`)
+
     //const result = await readAll()
     const client = await fastify.pg.connect()
     try {
@@ -47,6 +48,7 @@ module.exports = async function (fastify, opts) {
 
   fastify.post('/', async function (request, reply) {
     const body = request.body
+
 
     if(!validate(body)) {
       reply

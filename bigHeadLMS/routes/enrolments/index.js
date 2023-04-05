@@ -1,5 +1,5 @@
 'use strict'
-const validate = require('../../model/enrolmentScheme.js')()
+const validate = require('../../model/enrolmentScheme')()
 
 module.exports = async function (fastify, opts) {
   // 1. 학생이 수강신청한 내역 조회
