@@ -6,7 +6,7 @@ module.exports = async function (fastify, opts) {
     const userId = request.query.user_id
     const className = request.query.name
     const categoryId = request.query.category_id
-
+    console.log(`[debug] ${className}, ${categoryId}`)
     //const result = await readAll()
     const client = await fastify.pg.connect()
     try {
@@ -27,9 +27,9 @@ module.exports = async function (fastify, opts) {
            JOIN public.class_category cc
              ON c.category_id = cc.id
           WHERE 1=1
-          ${typeof userId !== 'undefined'     ? 'AND c.user_id =' + userId : ''}
-          ${typeof className !== 'undefined'  ? 'AND c.name =' + '\'' + className + '\'' : ''}
-          ${typeof categoryId !== 'undefined' ? 'AND c.category_id =' + categoryId : ''}                  
+          ${typeof userId !== 'undefined'     && userId !== ''     ? 'AND c.user_id =' + userId : ''}
+          ${typeof className !== 'undefined'  && className !== ''  ? 'AND c.name =' + '\'' + className + '\'' : ''}
+          ${typeof categoryId !== 'undefined' && categoryId !== '' ? 'AND c.category_id =' + categoryId : ''}                  
         `
       )
 
@@ -48,14 +48,14 @@ module.exports = async function (fastify, opts) {
   fastify.post('/', async function (request, reply) {
     const body = request.body
 
-    if(!isValid(body)) {
-      reply
-        .code(400)
-        .header('Content-type', 'application/json')
-        .send("Bad Request")
+    // if(!isValid(body)) {
+    //   reply
+    //     .code(400)
+    //     .header('Content-type', 'application/json')
+    //     .send("Bad Request")
 
-      return;
-    }
+    //   return;
+    // }
 
     //const result = await readAll()
     const client = await fastify.pg.connect()    
@@ -142,15 +142,33 @@ module.exports = async function (fastify, opts) {
     
     const client = await fastify.pg.connect();
     try {
-      const result = await client.query(
-        queryStr
-      )
+        const { rows } = await client.query(
+          `SELECT u.type           
+             FROM public.user u
+            WHERE u.id = $1                    
+           `, [request.user_id]
+        )
+  
+        const userType = rows[0]?.type
+  
+        if(userType === 'PROFESSOR') {
+      
+          const result = await client.query(
+            queryStr
+          )
 
-      const { rows } = await client.query(
-        "SELECT * FROM CLASS where id = '"+request.params.id+"'"
-      )
+          const { rows } = await client.query(
+            "SELECT * FROM CLASS where id = '"+request.params.id+"'"
+          )
 
-      reply.code(200).send(rows)
+          reply.code(200).send(rows) 
+        } else {
+            reply
+              .code(401)
+              .header('Content-type', 'application/json')
+              .send("PROPESSOR 계정만 수업을 생성할 수 있습니다.")
+          }
+
       
     } finally {
       client.release()
