@@ -95,22 +95,24 @@ module.exports = async function (fastify, opts) {
 
   // 3. 학생이 수강신청 취소
   fastify.patch('/:id', async function (request, reply) {
+    const class_id = request.params.id
     const client = await fastify.pg.connect()
     try {
-        const found  = await client.query(
-            `SELECT * 
+        // 수강신청 취소는 취소 요청이 아닐 때만 가능
+        const { rowCount } = await client.query(
+            `SELECT *
             FROM public.enrolment
-            WHERE id = ${request.params.id}`
-          )
-        console.log(found);
+            WHERE id = ${class_id} and status not like '${fastify.ENROLMENT_STATUS.취소}'`
+        )
+        console.log(rowCount);
 
         let result = null;
-        if (found.rows) {
+        if (rowCount == 1) {
           await client.query(
             `UPDATE public.enrolment
             SET status='${fastify.ENROLMENT_STATUS.취소}'
             , mod_date = CURRENT_TIMESTAMP
-            WHERE id = ${request.params.id}`
+            WHERE id = ${class_id}`
           )
 
           result = await client.query(
@@ -118,16 +120,17 @@ module.exports = async function (fastify, opts) {
             FROM public.enrolment pe
             JOIN public.code pc 
             ON pe.status = pc.code 
-            WHERE pe.id = ${request.params.id} and pc.code_group LIKE '${fastify.code_group.ENROLMENT_STATUS}';`
+            WHERE pe.id = ${class_id} and pc.code_group LIKE '${fastify.code_group.ENROLMENT_STATUS}';`
           )
+
+          reply
+          .code(200)
+          .send(result.rows)
         } else {
           reply
           .code(404)
-          .send("존재하지 않는 수강신청입니다.")
+          .send("잘못된 수강 취소 요청입니다.")
         }
-      reply
-      .code(200)
-      .send(result.rows)
     } catch (error) {
       console.log(error)
     } finally {
