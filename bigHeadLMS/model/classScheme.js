@@ -3,13 +3,28 @@ const ajv = new Ajv()
 
 module.exports = () => {  
   const classSchema = {
-    $id: "classSchema",
-    type: 'object',
-    properties: {      
-      name: { type: 'string' },
-      category_id: { type: 'number' }      
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
     },
-    required: ['category_id']
+    "name": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "integer"
+    },
+    "category_id": {
+      "type": "integer"
+    },
+    "reg_date": {
+      "type": "string"
+    },
+    "mod_date": {
+      "type": "string"
+    }
+  },
+  "required": []
   }
 
   const validate = ajv.compile(classSchema)

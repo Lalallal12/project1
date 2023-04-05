@@ -1,12 +1,12 @@
 'use strict'
-const isValid = require('../../model/classScheme')
+const validate = require('../../model/classScheme')()
 
 module.exports = async function (fastify, opts) {
   fastify.get('/', async function (request, reply) {
     const userId = request.query.user_id
     const className = request.query.name
     const categoryId = request.query.category_id
-    console.log(`[debug] ${className}, ${categoryId}`)
+
     //const result = await readAll()
     const client = await fastify.pg.connect()
     try {
@@ -48,14 +48,12 @@ module.exports = async function (fastify, opts) {
   fastify.post('/', async function (request, reply) {
     const body = request.body
 
-    // if(!isValid(body)) {
-    //   reply
-    //     .code(400)
-    //     .header('Content-type', 'application/json')
-    //     .send("Bad Request")
-
-    //   return;
-    // }
+    if(!validate(request.body)) {
+      reply
+        .code(400)
+        .send("유효하지 않은 값입니다.")
+      return;
+    }
 
     //const result = await readAll()
     const client = await fastify.pg.connect()    
