@@ -1,5 +1,5 @@
 'use strict'
-const isValid = require('../../model/classScheme')
+const validate = require('../../model/classScheme')() // return한 validate 
 
 module.exports = async function (fastify, opts) {
   fastify.get('/', async function (request, reply) {
@@ -47,6 +47,13 @@ module.exports = async function (fastify, opts) {
 
   fastify.post('/', async function (request, reply) {
     const body = request.body
+
+    if(!validate(body)) {
+      reply
+        .code(400)
+        .send("유효하지 않은 값입니다.")
+      return;
+    }
 
     // if(!isValid(body)) {
     //   reply
@@ -119,9 +126,9 @@ module.exports = async function (fastify, opts) {
 
   fastify.put('/:id', async function (request, reply) {
 
-    let queryStr ="";
+   /*  let queryStr ="";
 
-    queryStr = "update class set mod_date =now()"
+   queryStr = "update class set mod_date =now()"
     
     if(request.body.name != undefined)
       queryStr = queryStr + ", name = '"+ request.body.name +"' ";
@@ -131,16 +138,28 @@ module.exports = async function (fastify, opts) {
       queryStr = queryStr + ", category_id = '"+ request.body.category_id +"' ";
     
 
-    queryStr = queryStr+"where id='"+request.params.id+"'";
+    queryStr = queryStr+"where id='"+request.params.id+"'"; */
 /*
     queryStr =    "update class set mod_date =now() " 
     queryStr =    queryStr + (request.body.name != undefined)? ", name = '"+ request.body.name +"' ":""
     queryStr =    queryStr + (request.body.userId != undefined)? ", user_id = '"+ request.body.userId +"' ":""
     queryStr =    queryStr + (request.body.categoryId != undefined)? ", category_id = '"+ request.body.categoryId +"' ":"";
- */
     console.log(queryStr)
-    
+ */
+
+    if(!validate(request.body)) {
+      reply
+        .code(400)
+        .send("유효하지 않은 값입니다.")
+      return;
+    }
+
+    const name = request.body.name
+    const userId = request.body.user_id
+    const categoryId = request.body.category_id
+
     const client = await fastify.pg.connect();
+
     try {
         const { rows } = await client.query(
           `SELECT u.type           
@@ -153,15 +172,40 @@ module.exports = async function (fastify, opts) {
   
         if(userType === 'PROFESSOR') {
       
-          const result = await client.query(
-            queryStr
+          const { row, rowCount }  = await client.query(
+            //queryStr  
+          `UPDATE
+              CLASS
+           SET
+            MOD_DATE = NOW()
+            ${typeof name !== 'undefined'     && name !== ''     ? ', name =' + '\'' + name + '\'' : ''}
+            ${typeof userId !== 'undefined'  && userId !== ''  ? ', user_Id =' + userId : ''}
+            ${typeof categoryId !== 'undefined' && categoryId !== '' ? ', category_Id =' + categoryId : ''}    
+            WHERE id = $1                    
+           `, [request.params.id]              
+        
           )
 
           const { rows } = await client.query(
-            "SELECT * FROM CLASS where id = '"+request.params.id+"'"
+            `SELECT *          
+               FROM PUBLIC.CLASS C
+              WHERE C.ID = $1                    
+              `, [request.params.id]  
           )
 
-          reply.code(200).send(rows) 
+        if(rowCount > 0) {
+          const result = {class: rows[0]}
+
+          reply
+           .code(201)
+           .header('Content-type', 'application/json')
+           .send(result)
+        } else {
+          reply
+           .code(500)
+           .header('Content-type', 'application/json')
+           .send("오류가 발생했습니다.")
+        }
         } else {
             reply
               .code(401)

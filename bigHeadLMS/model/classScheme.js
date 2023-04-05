@@ -1,17 +1,34 @@
 const Ajv = require('ajv')
 const ajv = new Ajv()
 
-module.exports = () => {  
-  const classSchema = {
-    $id: "classSchema",
-    type: 'object',
-    properties: {      
-      name: { type: 'string' },
-      category_id: { type: 'number' }      
+module.exports = () => {
+  const classSchema = 
+  {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "user_id": {
+        "type": "integer"
+      },
+      "category_id": {
+        "type": "integer"
+      },
+      "reg_date": {
+        "type": "string"
+      },
+      "mod_date": {
+        "type": "string"
+      }
     },
-    required: ['category_id']
+    "required": [
+      "user_id",
+    ]
   }
-
-  const validate = ajv.compile(classSchema)
+  const validate = ajv.compile(classSchema);
   return validate;
 }
