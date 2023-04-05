@@ -1,4 +1,5 @@
 'use strict'
+const validate = require('../../model/enrolmentScheme.js')()
 
 module.exports = async function (fastify, opts) {
   // 1. 학생이 수강신청한 내역 조회
@@ -35,6 +36,13 @@ module.exports = async function (fastify, opts) {
     const client = await fastify.pg.connect()
     // const status = request.body.status
     // const user   = request.body.userid
+    if(!validate(request.body)) {
+      reply
+        .code(400)
+        .send("유효하지 않은 값입니다.")
+      return;
+    }
+
     const classid = request.body.class_id
     
 // ///// 1. 신청 대기 /////////////////////////////////////
@@ -75,7 +83,7 @@ module.exports = async function (fastify, opts) {
             now(),
             now()) returning id`
             )
-            console.log(rows)
+            // console.log(rows)
 
           const result = await client.query(
             `SELECT pe.id, pe.user_id, pe.class_id, pe.status, pc.name, pe.reg_date, pe.mod_date 
@@ -96,15 +104,15 @@ module.exports = async function (fastify, opts) {
   // 3. 학생이 수강신청 취소
   fastify.patch('/:id', async function (request, reply) {
     const class_id = request.params.id
+
     const client = await fastify.pg.connect()
     try {
-        // 수강신청 취소는 취소 요청이 아닐 때만 가능
+        // 수강신청 취소는 취소 상태가 아닐 때만 가능
         const { rowCount } = await client.query(
             `SELECT *
             FROM public.enrolment
-            WHERE id = ${class_id} and status not like '${fastify.ENROLMENT_STATUS.취소}'`
+            WHERE id = ${class_id} AND status NOT LIKE '${fastify.ENROLMENT_STATUS.취소}'`
         )
-        console.log(rowCount);
 
         let result = null;
         if (rowCount == 1) {
@@ -120,7 +128,7 @@ module.exports = async function (fastify, opts) {
             FROM public.enrolment pe
             JOIN public.code pc 
             ON pe.status = pc.code 
-            WHERE pe.id = ${class_id} and pc.code_group LIKE '${fastify.code_group.ENROLMENT_STATUS}';`
+            WHERE pe.id = ${class_id} AND pc.code_group LIKE '${fastify.code_group.ENROLMENT_STATUS}';`
           )
 
           reply
@@ -128,7 +136,7 @@ module.exports = async function (fastify, opts) {
           .send(result.rows)
         } else {
           reply
-          .code(404)
+          .code(401)
           .send("잘못된 수강 취소 요청입니다.")
         }
     } catch (error) {
